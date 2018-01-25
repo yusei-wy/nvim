@@ -1,0 +1,32 @@
+[[plugins]] # sidebar
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  map <C-e> :NERDTreeToggle<CR>
+'''
+
+[[plugins]] # wakatime
+repo = 'wakatime/vim-wakatime'
+
+[[plugins]] # autocomplete
+repo = 'Shougo/deoplete.nvim'
+
+[[plugins]] # C autocomplete
+repo = 'zchee/deoplete-clang'
+
+[[plugins]] # git client
+repo = 'tpope/vim-fugitive'
+hook_add = '''
+nmap [figitive] <Nop>
+map <Leader>g [figitive]
+nmap <silent> [figitive]s :<C-u>Gstatus<CR>
+nmap <silent> [figitive]d :<C-u>Gdiff<CR>
+nmap <silent> [figitive]b :<C-u>Gblame<CR>
+nmap <silent> [figitive]l :<C-u>Glog<CR>
+'''
+
+[[plugins]] # linter
+repo = 'w0rp/ale'
+
+[[plugins]] # surround
+repo = 'tpope/vim-surround'
+
