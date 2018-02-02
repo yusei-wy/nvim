@@ -2,12 +2,12 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]] # hybrid
-repo = 'w0ng/vim-hybrid'
+repo = 'joshdick/onedark.vim'
 hook_add = '''
-set background=dark
-" colorscheme の設定は source 後にあ行う必要があるので VimEnter で行う
+" "set background=dark
+" colorscheme の設定は source 後に行う必要があるので VimEnter で行う
 " ただし Colorscheme イベントの発生が抑制されないように nested をつける
-au MyAutoCmd VimEnter * nested colorscheme hybrid
+au MyAutoCmd VimEnter * nested colorscheme onedark
 '''
 
 [[plugins]] # ステータスライン
@@ -77,3 +77,25 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
 
 [[plugins]] # git diff
 repo = 'airblade/vim-gitgutter'
+
+[[plugins]] # プログラミング言語の強調表示など
+repo = 'sheerun/vim-polyglot'
+hook_add = '''
+" Vue 効率的に強調
+autocmd FileType vue syntax sync fromstart
+'''
+
+[[plugins]] # 閉じ括弧の補完
+repo = 'jiangmiao/auto-pairs'
+
+[[plugins]] # 文法チェッカ
+repo = 'scrooloose/syntastic'
+
+[[plugins]] # highlight color code
+repo = 'lilydjwg/colorizer'
+
+[[plugins]] # typescript
+repo = 'mhartington/nvim-typescript'
+hook_add = '''
+let g:nvim_typescript#vue_support = 1
+'''

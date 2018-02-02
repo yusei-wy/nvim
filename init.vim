@@ -55,9 +55,10 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 set cursorline
+set cursorcolumn
 set number
 " 不可視文字の表示
 set list
-" 背景色を Terminal の背景色と揃える
-autocmd ColorScheme * highlight Normal ctermbg=none
-autocmd ColorScheme * highlight LineNr ctermbg=none
+"" 背景色を Terminal の背景色と揃える
+"autocmd ColorScheme * highlight Normal ctermbg=none
+"autocmd ColorScheme * highlight LineNr ctermbg=none

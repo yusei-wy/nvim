@@ -10,9 +10,6 @@ repo = 'wakatime/vim-wakatime'
 [[plugins]] # autocomplete
 repo = 'Shougo/deoplete.nvim'
 
-[[plugins]] # C autocomplete
-repo = 'zchee/deoplete-clang'
-
 [[plugins]] # git client
 repo = 'tpope/vim-fugitive'
 hook_add = '''
@@ -27,6 +24,15 @@ nmap <silent> [figitive]l :<C-u>Glog<CR>
 [[plugins]] # linter
 repo = 'w0rp/ale'
 
+[[plugins]] # linter c++
+repo = 'neomake/neomake'
+on_i = 1
+hook_post_source = '''
+autocmd! BufWritePost * Neomake
+let g:neomake_cpp_enable_markers=['clang']
+let g:neomake_cpp_clang_args = ["-std=c++14", "-Wall"]
+let g:neomake_cpp_clangcheck_args = ["-std=c++14", "-Wall"]
+'''
+
 [[plugins]] # surround
 repo = 'tpope/vim-surround'
-
