@@ -1,14 +1,46 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-[[plugins]] # hybrid
-repo = 'joshdick/onedark.vim'
-hook_add = '''
-" "set background=dark
-" colorscheme の設定は source 後に行う必要があるので VimEnter で行う
-" ただし Colorscheme イベントの発生が抑制されないように nested をつける
-au MyAutoCmd VimEnter * nested colorscheme onedark
+[[plugins]] # autocomplete
+repo = 'Shougo/deoplete.nvim'
+on_event = 'InsertCharPre'
+hook_source = '''
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 0
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 0
+let g:deoplete#enable_ignore_case = 0
+let g:deoplete#enable_refresh_always = 0
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 10000
 '''
+on_i = 1
+
+# [[plugins]] # C autocomplete
+# repo = 'zchee/deoplete-clang'
+# depends = ['deoplete']
+# on_ft = ['c', 'cpp', 'cmake']
+# hook_add = '''
+# let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang-3.8.so.1'
+# let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
+# '''
+# [[plugins]] # C autocomplete
+# repo = 'justmao945/vim-clang'
+# hook_add = '''
+# let g:clang_c_options = '-std=gnu11'
+# let g:clang_cpp_options = '-std=c++11 -stdlib=libc++'
+# '''
+
+# [[plugins]] # colorscheme
+# repo = 'rakr/vim-one'
+# hook_add = '''
+# let g:one_allow_italics = 1 " I love italic for comments
+# set background=dark
+# " colorscheme の設定は source 後に行う必要があるので VimEnter で行う
+# " ただし Colorscheme イベントの発生が抑制されないように nested をつける
+# au MyAutoCmd VimEnter * nested colorscheme one
+# '''
 
 [[plugins]] # ステータスライン
 repo = 'vim-airline/vim-airline'
@@ -50,9 +82,6 @@ autocmd FileType vue syntax sync fromstart
 [[plugins]] # 閉じ括弧の補完
 repo = 'jiangmiao/auto-pairs'
 
-[[plugins]] # 文法チェッカ
-repo = 'scrooloose/syntastic'
-
 [[plugins]] # highlight color code
 repo = 'lilydjwg/colorizer'
 
@@ -77,3 +106,31 @@ let g:easymotion_leader_key = '\<Space>'
 
 [[plugins]] # surround
 repo = 'tpope/vim-surround'
+
+[[plugins]] # bookmark
+repo = 'MattesGroeger/vim-bookmarks'
+
+[[plugins]] # linter
+repo = 'w0rp/ale'
+hook_add = '''
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 1
+let g:ale_c_clang_options = ''
+let g:ale_c_gcc_options = ''
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+'''
+
+[[plugins]] # vinary
+repo = 'Shougo/vinarise'
+
+[[plugins]] # ctrlp
+repo = 'ctrlpvim/ctrlp.vim'
+hook_add = '''
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+'''
+
+[[plugins]] # indent
+repo = 'Yggdroot/indentLine'

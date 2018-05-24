@@ -25,6 +25,17 @@ endfunction
 
 call s:load('plugins')
 
+augroup initvim-local
+  autocmd!
+  autocmd BufNewFile,BufReadPost * call s:initvim_local(expand('<afile>:p:h'))
+augroup END
+
+function! s:initvim_local(loc)
+  let files = findfile('.init.vim.local', escape(a:loc, ' ') . ';', -1)
+  for i in reverse(filter(files, 'filereadable(v:val)'))
+    source `=i`
+  endfor
+endfunction
 
 " clipboard 共有
 set clipboard+=unnamedplus
@@ -39,7 +50,7 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 set cursorline
-set cursorcolumn
+" set cursorcolumn
 set number
 " 不可視文字の表示
 set list
@@ -55,6 +66,8 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>W :wq<CR>
 nnoremap <Leader>q :q<CR>
 
+nmap <Esc><Esc> :nohl<CR>
+
 
 " autocmd --------------------------------------------------
 " カーソル位置記憶
@@ -62,3 +75,20 @@ autocmd BufReadPost *
   \ if line("'\"") > 0 && line ("'\"") <= line("$") |
   \   exe "normal! g'\"" |
   \ endif
+
+
+" バイナリ編集(xxd)モード（vim -b での起動、もしくは *.bin ファイルを開くと発動します）
+augroup BinaryXXD
+  autocmd!
+  autocmd BufReadPre  *.bin let &binary =1
+  autocmd BufReadPost * if &binary | silent %!xxd -g 1
+  autocmd BufReadPost * set ft=xxd | endif
+  autocmd BufWritePre * if &binary | %!xxd -r | endif
+  autocmd BufWritePost * if &binary | silent %!xxd -g 1
+  autocmd BufWritePost * set nomod | endif
+augroup END
+
+
+" languages --------------------------------------------------
+" asm
+au BufNewFile,BufRead *.asm set tabstop=4 shiftwidth=4
