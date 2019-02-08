@@ -4,10 +4,8 @@ augroup MyAutoCmd
 augroup END
 
 " neovim は python 依存なので専用の virtualenv へのパス
-" let g:python_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/$(pyenv global | grep python2)/bin/python") || echo -n $(which python2)')
-" let g:python3_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/$(pyenv global | grep python3)/bin/python") || echo -n $(which python3)')
-let g:python3_host_prog = $PYENV_ROOT . '/shims/python2'
-let g:python3_host_prog = $PYENV_ROOT . '/shims/python3'
+let g:python_host_prog = $PYENV_ROOT . '/versions/neovim2/bin/python'
+let g:python3_host_prog = $PYENV_ROOT . '/versions/neovim3/bin/python'
 
 " ENV
 let $CACHE = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
@@ -37,26 +35,48 @@ function! s:initvim_local(loc)
   endfor
 endfunction
 
+" ネストしたディレクトリを作成する関数
+function! s:mkdir(dir)
+  if !isdirectory(a:dir)
+    " "p" を渡すことでネストしたディレクトリ全てが作成される
+    call mkdir(a:dir, "p")
+  endif
+endfunction
+
 " clipboard 共有
 set clipboard+=unnamedplus
 
 filetype plugin on
 syntax on
 
+" colorscheme blue
+" " 背景透過
+" highlight Normal ctermbg=NONE guibg=NONE
+" highlight LineNr ctermbg=NONE guibg=NONE
+
 set noswapfile
-set nobackup
-set autoindent
-set expandtab
-set tabstop=2
-set shiftwidth=2
-set cursorline
-" set cursorcolumn
+set backupdir=$HOME/.vimbackup
+call s:mkdir(&backupdir)
+set undodir=$HOME/.vimundo
+call s:mkdir(&undodir)
+
+set t_Co=256
+set termguicolors
 set number
 " 不可視文字の表示
 set list
-" 背景色を Terminal の背景色と揃える
-autocmd ColorScheme * highlight Normal ctermbg=none
-autocmd ColorScheme * highlight LineNr ctermbg=none
+set listchars=tab:»\ ,trail:-,extends:»,precedes:«,nbsp:% "space 対応"
+set ruler "カーソルが何行目の何列目に置かれているかを表示"
+set colorcolumn=80
+set autoindent
+set smartindent
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set backspace=indent,eol,start
+set mouse=a   "マウス有効"
+set fileformats=unix,dos,mac
+set autowrite " :make でファイル内容を自動保存
 
 
 " Keybinds --------------------------------------------------
@@ -76,7 +96,6 @@ autocmd BufReadPost *
   \   exe "normal! g'\"" |
   \ endif
 
-
 " バイナリ編集(xxd)モード（vim -b での起動、もしくは *.bin ファイルを開くと発動します）
 augroup BinaryXXD
   autocmd!
@@ -87,7 +106,6 @@ augroup BinaryXXD
   autocmd BufWritePost * if &binary | silent %!xxd -g 1
   autocmd BufWritePost * set nomod | endif
 augroup END
-
 
 " languages --------------------------------------------------
 " asm

@@ -1,29 +1,86 @@
-[[plugins]] # dein.vim command
+[[plugins]] # dein
 repo = 'haya14busa/dein-command.vim'
 on_cmd = 'Dein'
 
-[[plugins]] # sidebar
-repo = 'scrooloose/nerdtree'
-hook_add = '''
-  map <C-e> :NERDTreeToggle<CR>
+[[plugins]] # autocomplete
+repo = 'Shougo/deoplete.nvim'
+on_event = 'InsertCharPre'
+hook_source = '''
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#auto_complete_delay = 0
+  let g:deoplete#auto_complete_start_length = 1
+  let g:deoplete#enable_camel_case = 0
+  let g:deoplete#enable_ignore_case = 0
+  let g:deoplete#enable_refresh_always = 0
+  let g:deoplete#enable_smart_case = 1
+  let g:deoplete#file#enable_buffer_path = 1
+  let g:deoplete#max_list = 10000
+'''
+on_i = 1
+
+[[plugins]]
+repo = 'Shougo/neosnippet'
+hook_source = '''
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-k> <Plug>(neosnippet_expand_target)
+  if has('conceal')
+    set conceallevel=2 concealcursor=niv
+  endif
+'''
+on_i  = 1
+depends = ['neosnippet-snippets']
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'zchee/deoplete-jedi'
+hook_source = '''
+  let g:jedi#force_py_version = 3
+'''
+on_ft = 'python'
+
+[[plugins]]
+repo = "zchee/deoplete-clang"
+on_ft = ['c', 'cpp', 'cmake']
+depends = "deoplete.nvim"
+hook_source = """
+  let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-6.0/lib/libclang-6.0.so.1'
+  let g:deoplete#sources#clang#clang_header='/usr/include/clang'
+"""
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+on_ft = 'go'
+depends = 'deoplete.nvim'
+hook_source = '''
+  let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
 '''
 
-[[plugins]] # git client
-repo = 'tpope/vim-fugitive'
+[[plugins]]
+repo = 'SirVer/ultisnips'
+
+[[plugins]] # formatter
+repo = "rhysd/vim-clang-format"
+on_ft = ['c', 'cpp', 'cmake']
 hook_add = '''
-nmap [figitive] <Nop>
-map <Leader>g [figitive]
-nmap <silent> [figitive]s :<C-u>Gstatus<CR>
-nmap <silent> [figitive]d :<C-u>Gdiff<CR>
-nmap <silent> [figitive]b :<C-u>Gblame<CR>
-nmap <silent> [figitive]l :<C-u>Glog<CR>
+  let g:clang_format#auto_format = 1
+  let g:clang_format#code_style = 'llvm'
+
+  autocmd FileType c,cpp,cmake ClangFormatAutoEnable
+  autocmd BufWritePre *.c,*.h,*.cpp :ClangFormat
 '''
 
 [[plugins]] # formatter
-repo = 'rhysd/vim-clang-format'
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
 hook_add = '''
-let g:clang_format#auto_format = 1
-let g:clang_format#code_style = 'llvm'
-autocmd FileType c,cpp,cmake ClangFormatAutoEnable
+  let g:rustfmt_autosave = 1
+  autocmd BufWritePre *.rs :RustFmt
 '''
-# on_ft = ['c', 'cpp', 'cmake']
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = ['html', 'haml']

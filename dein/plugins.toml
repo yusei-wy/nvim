@@ -1,48 +1,41 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-[[plugins]] # autocomplete
-repo = 'Shougo/deoplete.nvim'
-on_event = 'InsertCharPre'
-hook_source = '''
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete_delay = 0
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_camel_case = 0
-let g:deoplete#enable_ignore_case = 0
-let g:deoplete#enable_refresh_always = 0
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#max_list = 10000
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+hook_post_update = '''
+  let cmd = 'make'
+  let g:dein#plugin.build = cmd
 '''
-on_i = 1
 
-# [[plugins]] # C autocomplete
-# repo = 'zchee/deoplete-clang'
-# depends = ['deoplete']
-# on_ft = ['c', 'cpp', 'cmake']
-# hook_add = '''
-# let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang-3.8.so.1'
-# let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
-# '''
-# [[plugins]] # C autocomplete
-# repo = 'justmao945/vim-clang'
-# hook_add = '''
-# let g:clang_c_options = '-std=gnu11'
-# let g:clang_cpp_options = '-std=c++11 -stdlib=libc++'
-# '''
+[[plugins]]
+repo = 'Shougo/defx.nvim'
 
-# [[plugins]] # colorscheme
-# repo = 'rakr/vim-one'
-# hook_add = '''
-# let g:one_allow_italics = 1 " I love italic for comments
-# set background=dark
-# " colorscheme の設定は source 後に行う必要があるので VimEnter で行う
-# " ただし Colorscheme イベントの発生が抑制されないように nested をつける
-# au MyAutoCmd VimEnter * nested colorscheme one
-# '''
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
 
-[[plugins]] # ステータスライン
+[[plugins]]
+repo = 'ayu-theme/ayu-vim'
+# repo = 'freeo/vim-kalisi'
+hook_add = '''
+  set background=dark
+  " colorscheme 設定は source 後に行う必要があるので確実に読まれている VimEnter のタイミングで行う
+  " 但し Colorscheme イベントの発生が抑制されないよう nented を付ける。
+  au MyAutoCmd VimEnter * nested colorscheme ayu
+
+  " 背景透過
+  au MyAutoCmd VimEnter * nested highlight Normal ctermbg=NONE guibg=NONE
+  au MyAutoCmd VimEnter * nested highlight LineNr ctermbg=NONE guibg=NONE
+  au MyAutoCmd VimEnter * nested highlight SpecialKey ctermbg=None guibg=None
+  " 選択範囲
+  au MyAutoCmd VimEnter * nested highlight Visual ctermbg=Grey guibg=Grey
+'''
+
+
+[[plugins]]
 repo = 'vim-airline/vim-airline'
 hook_add = '''
 " パワーラインでかっこよく
@@ -57,80 +50,161 @@ let g:airline#extensions#ale#warning_symbol = 'W:'
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 
-[[plugins]] # wakatime
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  map <C-e> :NERDTreeToggle<CR>
+'''
+
+[[plugins]]
 repo = 'wakatime/vim-wakatime'
 
-[[plugins]] # Toml
+[[plugins]]
 repo = 'cespare/vim-toml'
 
-[[plugins]] # Japanese doc
+[[plugins]]
+repo = 'racer-rust/vim-racer'
+on_ft = 'rust'
+hook_source = '''
+  set hidden
+  let g:racer_cmd = "$HOME/.cargo/bin/racer"
+  let g:racer_experimental_completer = 1
+  let $RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+'''
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = 'go'
+hook_add = '''
+  let g:go_bin_path = $GOPATH.'/bin'
+  let g:go_fmt_command = "goimports"
+  let g:go_fmt_autosave = 1
+  let g:go_highlight_build_constraints = 1
+  let g:go_highlight_extra_types = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_types = 1
+
+  " run :GoBuild or :GoTestCompile based on the go file
+  function! s:build_go_files()
+    let l:file = expand('%')
+    if l:file =~# '^\f\+_test\.go$'
+      call go#test#Test(0, 1)
+    elseif l:file =~# '^\f\+\.go$'
+      call go#cmd#Build(0)
+    endif
+  endfunction
+
+  let g:mapleader = "\<Space>"
+  nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  nmap <leader>r  <Plug>(go-run)
+  nmap <leader>t  <Plug>(go-test)
+  nmap <leader>c  <Plug>(go-coverage-toggle)
+  nmap <leader>i  <Plug>(go-info)
+  " テストファイルとの切り替え
+  command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  " neovim だと go_fmt_autosave が動作しない
+  autocmd BufWrite *.{go} :GoFmt
+'''
+
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+
+[[plugins]]
+repo = 'AndrewRadev/splitjoin.vim'
+
+[[plugins]]
 repo = 'vim-jp/vimdoc-ja'
 hook_add = '''
   set helplang=ja,en
 '''
 
-[[plugins]] # git diff
+[[plugins]]
 repo = 'airblade/vim-gitgutter'
-
-[[plugins]] # プログラミング言語の強調表示など
-repo = 'sheerun/vim-polyglot'
 hook_add = '''
-" Vue 効率的に強調
-autocmd FileType vue syntax sync fromstart
+  " 分割画面を縦にする
+  set diffopt+=vertical
+
+  " ファイル保存時に実行
+  autocmd BufWritePost * GitGutter
 '''
 
-[[plugins]] # 閉じ括弧の補完
+[[plugins]]
 repo = 'jiangmiao/auto-pairs'
 
-[[plugins]] # highlight color code
+[[plugins]]
 repo = 'lilydjwg/colorizer'
 
-# [[plugins]] # typescript
-# repo = 'mhartington/nvim-typescript'
-# hook_add = '''
-# let g:nvim_typescript#vue_support = 1
-# '''
-
-[[plugins]] # commentout
+[[plugins]]
 repo = 'scrooloose/nerdcommenter'
 hook_add = '''
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
+  " <leader>c<space> - toggle
+  " <leader>ci - 行の状態を個別に切り替え
+  " <leader>cA - 行末
+  " <leader>cs - ブロックコメント
+  let g:NERDSpaceDelims=1
+  let g:NERDDefaultAlign='left'
 '''
 
-[[plugins]] # cursor jump
+[[plugins]]
 repo = 'easymotion/vim-easymotion'
 hook_add = '''
 let g:easymotion_leader_key = '\<Space>'
 '''
 
-[[plugins]] # surround
+[[plugins]]
 repo = 'tpope/vim-surround'
 
-[[plugins]] # bookmark
+[[plugins]]
 repo = 'MattesGroeger/vim-bookmarks'
 
-[[plugins]] # linter
-repo = 'w0rp/ale'
-hook_add = '''
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_enter = 1
-let g:ale_c_clang_options = ''
-let g:ale_c_gcc_options = ''
-
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-'''
-
-[[plugins]] # vinary
+[[plugins]] # binary editor
 repo = 'Shougo/vinarise'
 
-[[plugins]] # ctrlp
+[[plugins]]
 repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 '''
 
-[[plugins]] # indent
+[[plugins]]
 repo = 'Yggdroot/indentLine'
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+  " エラー行に表示するマーク
+  " let g:ale_sign_error = '⨉'
+  " let g:ale_sign_warning = '⚠'
+
+  " オープン時に lint
+  let g:ale_lint_on_enter = 1
+  " 保存時に lint
+  let g:ale_lint_on_save = 1
+  " 編集中は lint しない
+  let g:ale_lint_on_text_changed = 'never'
+
+  " C/C++
+  let g:ale_c_clang_options = ''
+  let g:ale_c_gcc_options = ''
+
+  nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-j> <Plug>(ale_next_wrap)
+'''
+
+[[plugins]] # 行末スペース削除
+repo = 'bronson/vim-trailing-whitespace'
+hook_add = '''
+  " autocmd BufWritePre * :FixWhitespace
+'''
+
+[[plugins]]
+repo = 'terryma/vim-multiple-cursors'
