@@ -3,6 +3,8 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+" --- plugins ---
+
 " neovim は python 依存なので専用の virtualenv へのパス
 let g:python_host_prog = $PYENV_ROOT . '/versions/neovim2/bin/python'
 let g:python3_host_prog = $PYENV_ROOT . '/versions/neovim3/bin/python'
@@ -43,6 +45,8 @@ function! s:mkdir(dir)
   endif
 endfunction
 
+" --- init ---
+
 " clipboard 共有
 set clipboard+=unnamedplus
 
@@ -79,7 +83,7 @@ set fileformats=unix,dos,mac
 set autowrite " :make でファイル内容を自動保存
 
 
-" Keybinds --------------------------------------------------
+" --- Keybinds ---
 let g:mapleader = "\<Space>"
 inoremap <silent> jj <ESC>
 nnoremap <Leader>w :w<CR>
@@ -89,7 +93,7 @@ nnoremap <Leader>q :q<CR>
 nmap <Esc><Esc> :nohl<CR>
 
 
-" autocmd --------------------------------------------------
+" --- autocmd ---
 " カーソル位置記憶
 autocmd BufReadPost *
   \ if line("'\"") > 0 && line ("'\"") <= line("$") |
@@ -106,7 +110,3 @@ augroup BinaryXXD
   autocmd BufWritePost * if &binary | silent %!xxd -g 1
   autocmd BufWritePost * set nomod | endif
 augroup END
-
-" languages --------------------------------------------------
-" asm
-au BufNewFile,BufRead *.asm set tabstop=4 shiftwidth=4

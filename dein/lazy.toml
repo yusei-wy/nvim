@@ -32,6 +32,15 @@ on_i  = 1
 depends = ['neosnippet-snippets']
 
 [[plugins]]
+repo = 'racer-rust/vim-racer'
+on_ft = 'rust'
+hook_source = '''
+  set hidden
+  let g:racer_cmd = expand('~/.cargo/bin/racer')
+  let g:racer_experimental_completer = 1
+'''
+
+[[plugins]]
 repo = 'davidhalter/jedi-vim'
 on_ft = 'python'
 
@@ -83,4 +92,4 @@ hook_add = '''
 
 [[plugins]]
 repo = 'mattn/emmet-vim'
-on_ft = ['html', 'haml']
+on_ft = ['html', 'htmldjango', 'haml']
