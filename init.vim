@@ -67,6 +67,8 @@ call s:mkdir(&undodir)
 set t_Co=256
 set termguicolors
 set number
+" カーソルの点滅
+set guicursor=a:blinkon100
 " 不可視文字の表示
 set list
 set listchars=tab:»\ ,trail:-,extends:»,precedes:«,nbsp:% "space 対応"
@@ -81,7 +83,6 @@ set backspace=indent,eol,start
 set mouse=a   "マウス有効"
 set fileformats=unix,dos,mac
 set autowrite " :make でファイル内容を自動保存
-
 
 " --- Keybinds ---
 let g:mapleader = "\<Space>"
